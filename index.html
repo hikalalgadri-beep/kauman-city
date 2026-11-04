@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123b32">
+<title>KAUMAN CITY | Virtual City Semarang</title>
+<style>
+:root{
+ --green:#123b32;--green2:#1d5948;
+ --gold:#d6b46a;--cream:#f5f0e5;
+ --white:#fff;--text:#24332d;
+ --muted:#78847c;--border:#e8e2d5;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--cream);
+ color:var(--text);font-family:Arial,sans-serif;
+}
+header{
+ background:linear-gradient(120deg,#102f29,#1e5948);
+ color:white;padding:22px 17px 27px;
+ border-radius:0 0 25px 25px;
+}
+.top{display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:22px;letter-spacing:1px}
+.logo span{color:var(--gold)}
+.small{font-size:12px;color:#d9e4dc}
+.hero{padding:25px 0 8px}
+.hero h1{font-size:29px;margin:0 0 9px}
+.hero p{color:#d9e4dc;line-height:1.6;font-size:14px}
+.pill{
+ display:inline-block;background:#ffffff18;
+ border:1px solid #ffffff30;padding:8px 12px;
+ border-radius:30px;font-size:12px;margin:4px 3px 0 0
+}
+main{max-width:900px;margin:auto;padding:15px}
+nav{
+ display:flex;gap:8px;overflow-x:auto;padding:12px 0;
+ position:sticky;top:0;background:var(--cream);z-index:5
+}
+nav button{
+ border:1px solid var(--border);background:white;
+ padding:11px 14px;border-radius:30px;white-space:nowrap;
+ color:var(--green);font-weight:bold
+}
+nav button.active{background:var(--green);color:white}
+.page{display:none}
+.page.active{display:block}
+.panel{
+ background:white;border:1px solid var(--border);
+ padding:17px;border-radius:18px;margin-bottom:14px;
+ box-shadow:0 5px 18px #24332d08
+}
+h2{font-size:19px;margin:0 0 12px;color:var(--green)}
+h3{font-size:15px;margin:8px 0}
+p{line-height:1.55}
+.muted{font-size:13px;color:var(--muted)}
+.grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:10px
+}
+.tile{
+ background:#faf8f2;border:1px solid var(--border);
+ border-radius:15px;padding:13px;min-width:0
+}
+.emoji{font-size:30px}
+button{cursor:pointer}
+.btn{
+ border:0;background:var(--green);color:white;
+ padding:11px 14px;border-radius:10px;
+ font-weight:bold;margin-top:7px
+}
+.btn.gold{background:#b58c40;color:#fff}
+.btn.light{background:#e9eee9;color:var(--green)}
+.btn:disabled{opacity:.4}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#f4f1e8;border-radius:12px;padding:11px}
+.stat b{display:block;color:var(--green);font-size:16px;margin-top:5px}
+.bar{height:8px;background:#e5e5df;border-radius:10px;overflow:hidden;margin-top:7px}
+.bar i{display:block;height:100%;background:#4d9c71;width:50%}
+input,select,textarea{
+ width:100%;padding:12px;border:1px solid var(--border);
+ border-radius:10px;margin:6px 0 10px;font:inherit
+}
+textarea{min-height:90px}
+.notice{
+ background:#f7f0df;border-left:4px solid var(--gold);
+ padding:12px;border-radius:8px;font-size:12px;line-height:1.6
+}
+.feed{border-bottom:1px solid var(--border);padding:12px 0}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+.map{
+ background:#e4e7d7;border-radius:16px;padding:15px;
+ display:grid;grid-template-columns:1fr 1fr;gap:9px
+}
+.place{
+ background:#fff;border-radius:12px;padding:13px;
+ border:1px solid #d9dfcf
+}
+@media(min-width:650px){
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .hero h1{font-size:38px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="top">
+  <div class="logo">KAUMAN<span>CITY</span></div>
+  <div class="small">SEMARANG · INDONESIA</div>
+ </div>
+ <div class="hero">
+  <div class="pill">🏛️ VIRTUAL CITY</div>
+  <div class="pill">🌙 KOTA BERBUDAYA</div>
+  <h1>Selamat Datang di<br>Kauman City!</h1>
+  <p>Kota virtual dengan budaya, perdagangan,
+  kehidupan warga, dan suasana khas Kauman Semarang.</p>
+  <div class="pill">👑 Wali Kota: @hikamalgadri</div>
+ </div>
+</header>
+
+<main>
+<nav>
+ <button class="active" onclick="go('home',this)">🏠 Beranda</button>
+ <button onclick="go('map',this)">🗺️ Peta</button>
+ <button onclick="go('life',this)">🧑‍🌾 Kehidupan</button>
+ <button onclick="go('house',this)">🏡 Rumah</button>
+ <button onclick="go('market',this)">🛍️ Pasar</button>
+ <button onclick="go('bank',this)">🏦 Bank</button>
+ <button onclick="go('profile',this)">👤 Profil</button>
+ <button onclick="go('cityhall',this)">🏛️ Balai Kota</button>
+</nav>
+
+<!-- BERANDA -->
+<section id="home" class="page active">
+ <div class="panel">
+  <h2>🌆 Kota Kauman</h2>
+  <p>Bangun kehidupanmu sendiri. Bekerja, memiliki rumah,
+  berdagang, mengenal warga, dan menjelajahi kota.</p>
+  <div class="stats">
+   <div class="stat">💰 Saldo<b id="money">500</b><small> Koin virtual</small></div>
+   <div class="stat">⚡ Energi<b id="energy">80</b>/100</div>
+   <div class="stat">🍚 Gizi<b id="nutrition">75</b>/100</div>
+  </div>
+ </div>
+
+ <div class="panel">
+  <h2>✨ Jelajahi Kota</h2>
+  <div class="grid">
+   <div class="tile"><div class="emoji">🕌</div><h3>Masjid Kauman</h3><p class="muted">Tempat ibadah dan kegiatan masyarakat.</p><button class="btn light" onclick="go('map')">Jelajahi</button></div>
+   <div class="tile"><div class="emoji">🏦</div><h3>Kauman Bank</h3><p class="muted">Kelola saldo virtualmu.</p><button class="btn light" onclick="go('bank')">Masuk</button></div>
+   <div class="tile"><div class="emoji">🧺</div><h3>Pasar Kauman</h3><p class="muted">Pusat perdagangan warga.</p><button class="btn light" onclick="go('market')">Kunjungi</button></div>
+   <div class="tile"><div class="emoji">🏡</div><h3>Perumahan</h3><p class="muted">Lihat pilihan rumah.</p><button class="btn light" onclick="go('house')">Lihat</button></div>
+  </div>
+ </div>
+
+ <div class="panel">
+  <h2>📰 Kabar Warga</h2>
+  <div id="feed">
+   <div class="feed"><b>📢 Pemerintah Kauman City</b><p class="muted">Selamat datang di kota virtual Kauman!</p></div>
+   <div class="feed"><b>🕌 Masjid Kauman</b><p class="muted">Pusat kegiatan dan kebersamaan warga.</p></div>
+  </div>
+  <textarea id="postText" placeholder="Bagikan kabar kepada warga..."></textarea>
+  <button class="btn" onclick="post()">Terbitkan Postingan</button>
+ </div>
+</section>
+
+<!-- PETA -->
+<section id="map" class="page">
+ <div class="panel">
+  <h2>🗺️ Peta Kauman City</h2>
+  <p class="muted">Peta konsep wilayah kota virtual.</p>
+  <div class="map">
+   <div class="place">🕌<b><br>Masjid Kauman</b><p class="muted">Pusat ibadah</p></div>
+   <div class="place">🧺<b><br>Pasar Kauman</b><p class="muted">Perdagangan</p></div>
+   <div class="place">🏡<b><br>Kampung Kauman</b><p class="muted">Perumahan</p></div>
+   <div class="place">🏛️<b><br>Balai Kota</b><p class="muted">Pemerintahan</p></div>
+   <div class="place">🌳<b><br>Taman Warga</b><p class="muted">Ruang publik</p></div>
+   <div class="place">🏦<b><br>Kauman Bank</b><p class="muted">Keuangan virtual</p></div>
+  </div>
+  <div class="notice">Ini peta konsep, bukan peta geografis asli. Peta interaktif dan posisi bangunan sungguhan akan ditambahkan pada versi berikutnya.</div>
+ </div>
+</section>
+
+<!-- KEHIDUPAN -->
+<section id="life" class="page">
+ <div class="panel">
+  <h2>🧑‍🌾 Kehidupan Warga</h2>
+  <p class="muted">Kerjakan aktivitas untuk memperoleh koin virtual. Energi dan gizi perlu dijaga.</p>
+  <div class="stats">
+   <div class="stat">⚡ Energi<b id="energy2">80</b><div class="bar"><i id="energyBar"></i></div></div>
+   <div class="stat">🍚 Gizi<b id="nutrition2">75</b><div class="bar"><i id="nutritionBar"></i></div></div>
+   <div class="stat">💰 Saldo<b id="money2">500</b></div>
+  </div>
+ </div>
+ <div class="grid">
+  <div class="tile"><div class="emoji">🐔</div><h3>Pedagang Ayam</h3><p class="muted">Bekerja di pasar ayam virtual.</p><p>+75 koin</p><button class="btn" onclick="work(20,15,75)">Bekerja</button></div>
+  <div class="tile"><div class="emoji">🍜</div><h3>Penjual Makanan</h3><p class="muted">Melayani pembeli di warung.</p><p>+60 koin</p><button class="btn" onclick="work(15,12,60)">Bekerja</button></div>
+  <div class="tile"><div class="emoji">🧵</div><h3>Penjahit</h3><p class="muted">Membuat busana warga.</p><p>+65 koin</p><button class="btn" onclick="work(17,10,65)">Bekerja</button></div>
+  <div class="tile"><div class="emoji">🍚</div><h3>Warung Makan</h3><p class="muted">Pulihkan gizi dan energi.</p><p>-20 koin</p><button class="btn gold" onclick="eat()">Makan</button></div>
+  <div class="tile"><div class="emoji">🛏️</div><h3>Rumah</h3><p class="muted">Beristirahat untuk memulihkan energi.</p><button class="btn light" onclick="sleep()">Tidur</button></div>
+  <div class="tile"><div class="emoji">🕌</div><h3>Masjid Kauman</h3><p class="muted">Kunjungi masjid dan lihat informasi kegiatan.</p><button class="btn light" onclick="prayer()">Kunjungi</button></div>
+ </div>
+ <div class="notice">Ibadah bukan mekanik untuk mendapatkan koin atau bonus permainan. Fitur masjid hanya berupa kunjungan dan informasi kegiatan. Hormati waktu serta kekhusyukan ibadah.</div>
+</section>
+
+<!-- RUMAH -->
+<section id="house" class="page">
+ <div class="panel">
+  <h2>🏡 Perumahan Kauman</h2>
+  <p>Pilih konsep rumah untuk karakter virtualmu.</p>
+  <div class="grid">
+   <div class="tile"><div class="emoji">🏠</div><h3>Rumah Kampung</h3><p class="muted">Gaya kampung Semarang.</p><b>200 koin</b><button class="btn" onclick="buy(200,'Rumah Kampung')">Pilih</button></div>
+   <div class="tile"><div class="emoji">🏡</div><h3>Rumah Heritage</h3><p class="muted">Nuansa bangunan klasik.</p><b>400 koin</b><button class="btn" onclick="buy(400,'Rumah Heritage')">Pilih</button></div>
+   <div class="tile"><div class="emoji">🏘️</div><h3>Rumah Modern</h3><p class="muted">Desain minimalis modern.</p><b>600 koin</b><button class="btn" onclick="buy(600,'Rumah Modern')">Pilih</button></div>
+  </div>
+  <p id="myHouse" class="notice">Rumahmu: Belum memiliki rumah.</p>
+ </div>
+</section>
+
+<!-- PASAR -->
+<section id="market" class="page">
+ <div class="panel">
+  <h2>🛍️ Pasar Kauman</h2>
+  <p class="muted">Toko perlengkapan karakter virtual.</p>
+  <div class="grid">
+   <div class="tile"><div class="emoji">👕</div><h3>Baju Koko</h3><b>50 koin</b><button class="btn" onclick="buy(50,'Baju Koko')">Beli</button></div>
+   <div class="tile"><div class="emoji">🧕</div><h3>Hijab</h3><b>40 koin</b><button class="btn" onclick="buy(40,'Hijab')">Beli</button></div>
+   <div class="tile"><div class="emoji">🥻</div><h3>Gamis</h3><b>70 koin</b><button class="btn" onclick="buy(70,'Gamis')">Beli</button></div>
+   <div class="tile"><div class="emoji">🧵</div><h3>Batik Semarangan</h3><b>65 koin</b><button class="btn" onclick="buy(65,'Batik Semarangan')">Beli</button></div>
+   <div class="tile"><div class="emoji">🧣</div><h3>Sarung</h3><b>35 koin</b><button class="btn" onclick="buy(35,'Sarung')">Beli</button></div>
+   <div class="tile"><div class="emoji">🧥</div><h3>Lurik</h3><b>55 koin</b><button class="btn" onclick="buy(55,'Lurik')">Beli</button></div>
+  </div>
+ </div>
+</section>
+
+<!-- BANK -->
+<section id="bank" class="page">
+ <div class="panel">
+  <h2>🏦 KAUMAN BANK</h2>
+  <p class="muted">Modern virtual banking experience.</p>
+  <div class="tile">
+   <p>Saldo virtual kamu</p>
+   <h1 style="color:var(--green)" id="bankMoney">500</h1>
+   <b>Rp.KaumanCity</b>
+  </div>
+  <h3>📜 Riwayat transaksi</h3>
+  <div id="transactions" class="muted">Belum ada transaksi.</div>
+ </div>
+ <div class="panel">
+  <h2>🌱 Donasi & Saham Halal</h2>
+  <p>Konsep masa depan untuk mendukung kegiatan sosial dan usaha warga.</p>
+  <div class="notice">Belum tersedia transaksi uang sungguhan, pengumpulan donasi, atau investasi. Saham dan produk investasi nyata harus melalui lembaga resmi, pemeriksaan kepatuhan syariah, dan aturan yang berlaku.</div>
+ </div>
+</section>
+
+<!-- PROFIL -->
+<section id="profile" class="page">
+ <div class="panel">
+  <h2>👤 Profil Warga</h2>
+  <div class="emoji">🧑🏻</div>
+  <label>Nama karakter</label>
+  <input id="characterName" placeholder="Nama warga">
+  <label>Username Instagram (opsional)</label>
+  <input id="instagram" placeholder="@username">
+  <label>Pekerjaan</label>
+  <select id="job"><option>Belum bekerja</option><option>Pedagang ayam</option><option>Penjual makanan</option><option>Penjahit</option></select>
+  <button class="btn" onclick="saveProfile()">Simpan profil demo</button>
+  <p id="profileInfo" class="muted">Profil demo belum diisi.</p>
+ </div>
+ <div class="notice">Profil ini hanya tersimpan di perangkat/browser ini. Belum menjadi akun warga online.</div>
+</section>
+
+<!-- BALAI KOTA -->
+<section id="cityhall" class="page">
+ <div class="panel">
+  <h2>🏛️ Balai Kota Kauman</h2>
+  <div class="emoji">🕌</div>
+  <h3>Pusat pemerintahan dan kegiatan warga</h3>
+  <p>Masjid Kauman menjadi salah satu ikon budaya dan kehidupan masyarakat kota virtual ini. Fungsi pemerintahan dan administrasi kota dikelola melalui sistem Balai Kota virtual.</p>
+  <div class="tile"><b>Wali Kota</b><p>@hikamalgadri</p></div>
+  <div class="tile"><b>Program Kota</b><p>Pelestarian budaya, kebersihan lingkungan, perdagangan warga, dan kegiatan sosial.</p></div>
+  <div class="notice">Dashboard ini masih tampilan demo. Hak Wali Kota dan Admin harus diamankan melalui server sebelum digunakan banyak orang.</div>
+ </div>
+</section>
+
+<footer>
+ <b>KAUMAN CITY</b><br>
+ Virtual City of Semarang · V1.0<br>
+ Dibangun untuk simulasi kehidupan dan budaya warga.
+</footer>
+</main>
+
+<script>
+let state={
+ money:500,energy:80,nutrition:75,
+ house:"Belum memiliki rumah",transactions:[]
+};
+
+function go(id,button){
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+ if(button)button.classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function save(){
+ localStorage.setItem('kaumanCityDemo',JSON.stringify(state));
+}
+function load(){
+ try{
+  let saved=JSON.parse(localStorage.getItem('kaumanCityDemo'));
+  if(saved)state={...state,...saved};
+ }catch(e){}
+}
+function render(){
+ ['money','money2','bankMoney'].forEach(id=>{
+  let el=document.getElementById(id);
+  if(el)el.textContent=state.money;
+ });
+ ['energy','energy2'].forEach(id=>{
+  let el=document.getElementById(id);
+  if(el)el.textContent=state.energy;
+ });
+ ['nutrition','nutrition2'].forEach(id=>{
+  let el=document.getElementById(id);
+  if(el)el.textContent=state.nutrition;
+ });
+ document.getElementById('energyBar').style.width=state.energy+'%';
+ document.getElementById('nutritionBar').style.width=state.nutrition+'%';
+ document.getElementById('myHouse').textContent='Rumahmu: '+state.house;
+ document.getElementById('transactions').innerHTML=
+  state.transactions.length?state.transactions.slice(-8).reverse().map(t=>'<div class="feed">'+t+'</div>').join(''):'Belum ada transaksi.';
+}
+function log(text){
+ state.transactions.push(text);
+ save();render();
+}
+function work(energy,nutrition,reward){
+ if(state.energy<energy||state.nutrition<nutrition){
+  alert('Energi atau gizi kurang. Makan dan istirahat dulu!');
+  return;
+ }
+ state.energy-=energy;
+ state.nutrition-=nutrition;
+ state.money+=reward;
+ log('Pekerjaan selesai: +'+reward+' koin virtual');
+ alert('Kerja selesai! Kamu mendapat '+reward+' koin virtual.');
+}
+function eat(){
+ if(state.money<20){alert('Saldo koin virtual tidak cukup.');return;}
+ state.money-=20;
+ state.nutrition=Math.min(100,state.nutrition+30);
+ state.energy=Math.min(100,state.energy+8);
+ log('Makan di warung: -20 koin');
+ render();
+}
+function sleep(){
+ state.energy=Math.min(100,state.energy+35);
+ log('Istirahat di rumah.');
+ alert('Istirahat selesai. Energi bertambah!');
+}
+function prayer(){
+ alert('Selamat datang di Masjid Kauman virtual. Tempat ini untuk mengenal masjid dan kegiatan warga. Ibadah tetap dilakukan dengan niat dan kekhusyukan, bukan untuk hadiah permainan.');
+}
+function buy(price,item){
+ if(state.money<price){alert('Saldo koin virtual tidak cukup!');return;}
+ if(!confirm('Beli '+item+' seharga '+price+' koin virtual?'))return;
+ state.money-=price;
+ if(item.startsWith('Rumah'))state.house=item;
+ log('Pembelian '+item+': -'+price+' koin');
+ alert(item+' berhasil dibeli dalam simulasi!');
+}
+function post(){
+ let input=document.getElementById('postText');
+ let value=input.value.trim();
+ if(!value)return alert('Tulis postingan dulu!');
+ let item=document.createElement('div');
+ item.className='feed';
+ let title=document.createElement('b');
+ title.textContent='👤 Warga Kauman';
+ let content=document.createElement('p');
+ content.className='muted';
+ content.textContent=value;
+ item.append(title,content);
+ document.getElementById('feed').prepend(item);
+ input.value='';
+}
+function saveProfile(){
+ let name=document.getElementById('characterName').value.trim();
+ let insta=document.getElementById('instagram').value.trim();
+ let job=document.getElementById('job').value;
+ if(!name)return alert('Masukkan nama karakter!');
+ document.getElementById('profileInfo').textContent=
+ 'Nama: '+name+' | Instagram: '+(insta||'-')+' | Pekerjaan: '+job;
+}
+load();
+render();
+</script>
+</body>
+</html>
