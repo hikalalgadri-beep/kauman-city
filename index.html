@@ -1,405 +1,343 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#123b32">
-<title>KAUMAN CITY | Virtual City Semarang</title>
-<style>
-:root{
- --green:#123b32;--green2:#1d5948;
- --gold:#d6b46a;--cream:#f5f0e5;
- --white:#fff;--text:#24332d;
- --muted:#78847c;--border:#e8e2d5;
-}
-*{box-sizing:border-box}
-body{
- margin:0;background:var(--cream);
- color:var(--text);font-family:Arial,sans-serif;
-}
-header{
- background:linear-gradient(120deg,#102f29,#1e5948);
- color:white;padding:22px 17px 27px;
- border-radius:0 0 25px 25px;
-}
-.top{display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:900;font-size:22px;letter-spacing:1px}
-.logo span{color:var(--gold)}
-.small{font-size:12px;color:#d9e4dc}
-.hero{padding:25px 0 8px}
-.hero h1{font-size:29px;margin:0 0 9px}
-.hero p{color:#d9e4dc;line-height:1.6;font-size:14px}
-.pill{
- display:inline-block;background:#ffffff18;
- border:1px solid #ffffff30;padding:8px 12px;
- border-radius:30px;font-size:12px;margin:4px 3px 0 0
-}
-main{max-width:900px;margin:auto;padding:15px}
-nav{
- display:flex;gap:8px;overflow-x:auto;padding:12px 0;
- position:sticky;top:0;background:var(--cream);z-index:5
-}
-nav button{
- border:1px solid var(--border);background:white;
- padding:11px 14px;border-radius:30px;white-space:nowrap;
- color:var(--green);font-weight:bold
-}
-nav button.active{background:var(--green);color:white}
-.page{display:none}
-.page.active{display:block}
-.panel{
- background:white;border:1px solid var(--border);
- padding:17px;border-radius:18px;margin-bottom:14px;
- box-shadow:0 5px 18px #24332d08
-}
-h2{font-size:19px;margin:0 0 12px;color:var(--green)}
-h3{font-size:15px;margin:8px 0}
-p{line-height:1.55}
-.muted{font-size:13px;color:var(--muted)}
-.grid{
- display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
- gap:10px
-}
-.tile{
- background:#faf8f2;border:1px solid var(--border);
- border-radius:15px;padding:13px;min-width:0
-}
-.emoji{font-size:30px}
-button{cursor:pointer}
-.btn{
- border:0;background:var(--green);color:white;
- padding:11px 14px;border-radius:10px;
- font-weight:bold;margin-top:7px
-}
-.btn.gold{background:#b58c40;color:#fff}
-.btn.light{background:#e9eee9;color:var(--green)}
-.btn:disabled{opacity:.4}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#f4f1e8;border-radius:12px;padding:11px}
-.stat b{display:block;color:var(--green);font-size:16px;margin-top:5px}
-.bar{height:8px;background:#e5e5df;border-radius:10px;overflow:hidden;margin-top:7px}
-.bar i{display:block;height:100%;background:#4d9c71;width:50%}
-input,select,textarea{
- width:100%;padding:12px;border:1px solid var(--border);
- border-radius:10px;margin:6px 0 10px;font:inherit
-}
-textarea{min-height:90px}
-.notice{
- background:#f7f0df;border-left:4px solid var(--gold);
- padding:12px;border-radius:8px;font-size:12px;line-height:1.6
-}
-.feed{border-bottom:1px solid var(--border);padding:12px 0}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
-.map{
- background:#e4e7d7;border-radius:16px;padding:15px;
- display:grid;grid-template-columns:1fr 1fr;gap:9px
-}
-.place{
- background:#fff;border-radius:12px;padding:13px;
- border:1px solid #d9dfcf
-}
-@media(min-width:650px){
- .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
- .hero h1{font-size:38px}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kauman City - Hybrid Virtual World</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kauman: {
+                            50: '#f0fdf4', 100: '#dcfce7', 600: '#166534',
+                            700: '#14532d', 800: '#0f3c1f', 900: '#062310',
+                            gold: '#d4af37', cream: '#fef3c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Supabase SDK -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background-color: #062310; color: #fef3c7; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
+        .isometric-map { background: linear-gradient(135deg, #0f3c1f 0%, #166534 50%, #062310 100%); position: relative; box-shadow: inset 0 0 50px rgba(0,0,0,0.6); }
+        .glass-panel { background: rgba(15, 60, 31, 0.92); backdrop-filter: blur(12px); border: 1px solid rgba(212, 175, 55, 0.3); }
+        .floating-btn { transition: all 0.2s ease; }
+        .floating-btn:active { transform: scale(0.92); }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+    </style>
 </head>
-<body>
+<body class="pb-24">
 
-<header>
- <div class="top">
-  <div class="logo">KAUMAN<span>CITY</span></div>
-  <div class="small">SEMARANG · INDONESIA</div>
- </div>
- <div class="hero">
-  <div class="pill">🏛️ VIRTUAL CITY</div>
-  <div class="pill">🌙 KOTA BERBUDAYA</div>
-  <h1>Selamat Datang di<br>Kauman City!</h1>
-  <p>Kota virtual dengan budaya, perdagangan,
-  kehidupan warga, dan suasana khas Kauman Semarang.</p>
-  <div class="pill">👑 Wali Kota: @hikamalgadri</div>
- </div>
-</header>
+    <!-- TOP HEADER BAR -->
+    <header class="sticky top-0 z-50 glass-panel px-4 py-3 flex items-center justify-between border-b border-kauman-gold/30">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-kauman-gold flex items-center justify-center text-kauman-900 font-bold shadow-lg">
+                <i class="fa-solid fa-mosque text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-base tracking-wide text-kauman-cream flex items-center gap-1.5">
+                    KAUMAN CITY <span id="verified-badge" class="hidden text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-check"></i></span>
+                </h1>
+                <p class="text-xs text-kauman-gold">Semarang Heritage • <span id="user-role-display">Tamu</span></p>
+            </div>
+        </div>
 
-<main>
-<nav>
- <button class="active" onclick="go('home',this)">🏠 Beranda</button>
- <button onclick="go('map',this)">🗺️ Peta</button>
- <button onclick="go('life',this)">🧑‍🌾 Kehidupan</button>
- <button onclick="go('house',this)">🏡 Rumah</button>
- <button onclick="go('market',this)">🛍️ Pasar</button>
- <button onclick="go('bank',this)">🏦 Bank</button>
- <button onclick="go('profile',this)">👤 Profil</button>
- <button onclick="go('cityhall',this)">🏛️ Balai Kota</button>
-</nav>
+        <div class="flex items-center space-x-2">
+            <div class="bg-kauman-900/80 border border-kauman-gold/40 px-3 py-1 rounded-full text-xs flex items-center space-x-1.5">
+                <i class="fa-solid fa-coins text-kauman-gold"></i>
+                <span id="header-saldo" class="font-bold text-kauman-cream">Rp. 0</span>
+            </div>
+            <button onclick="openModal('auth-modal')" id="auth-main-btn" class="bg-kauman-gold text-kauman-900 font-bold px-3 py-1.5 rounded-xl text-xs shadow hover:bg-yellow-400 transition">
+                <i class="fa-solid fa-user-circle mr-1"></i> <span id="auth-btn-text">Masuk</span>
+            </button>
+        </div>
+    </header>
 
-<!-- BERANDA -->
-<section id="home" class="page active">
- <div class="panel">
-  <h2>🌆 Kota Kauman</h2>
-  <p>Bangun kehidupanmu sendiri. Bekerja, memiliki rumah,
-  berdagang, mengenal warga, dan menjelajahi kota.</p>
-  <div class="stats">
-   <div class="stat">💰 Saldo<b id="money">500</b><small> Koin virtual</small></div>
-   <div class="stat">⚡ Energi<b id="energy">80</b>/100</div>
-   <div class="stat">🍚 Gizi<b id="nutrition">75</b>/100</div>
-  </div>
- </div>
+    <!-- BANNER PEMBERITAHUAN DEMO / KONEKSI -->
+    <div id="config-banner" class="bg-gradient-to-r from-amber-600 to-yellow-700 text-kauman-900 px-4 py-2 text-xs font-semibold flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-triangle-exclamation text-base"></i>
+            <span>Mode Demo Lokal Aktif. Konfigurasikan Supabase di `app.js` untuk mengaktifkan database sungguhan.</span>
+        </div>
+    </div>
 
- <div class="panel">
-  <h2>✨ Jelajahi Kota</h2>
-  <div class="grid">
-   <div class="tile"><div class="emoji">🕌</div><h3>Masjid Kauman</h3><p class="muted">Tempat ibadah dan kegiatan masyarakat.</p><button class="btn light" onclick="go('map')">Jelajahi</button></div>
-   <div class="tile"><div class="emoji">🏦</div><h3>Kauman Bank</h3><p class="muted">Kelola saldo virtualmu.</p><button class="btn light" onclick="go('bank')">Masuk</button></div>
-   <div class="tile"><div class="emoji">🧺</div><h3>Pasar Kauman</h3><p class="muted">Pusat perdagangan warga.</p><button class="btn light" onclick="go('market')">Kunjungi</button></div>
-   <div class="tile"><div class="emoji">🏡</div><h3>Perumahan</h3><p class="muted">Lihat pilihan rumah.</p><button class="btn light" onclick="go('house')">Lihat</button></div>
-  </div>
- </div>
+    <!-- MAIN CONTAINER -->
+    <main class="p-3 max-w-md mx-auto space-y-4">
 
- <div class="panel">
-  <h2>📰 Kabar Warga</h2>
-  <div id="feed">
-   <div class="feed"><b>📢 Pemerintah Kauman City</b><p class="muted">Selamat datang di kota virtual Kauman!</p></div>
-   <div class="feed"><b>🕌 Masjid Kauman</b><p class="muted">Pusat kegiatan dan kebersamaan warga.</p></div>
-  </div>
-  <textarea id="postText" placeholder="Bagikan kabar kepada warga..."></textarea>
-  <button class="btn" onclick="post()">Terbitkan Postingan</button>
- </div>
-</section>
+        <!-- WIDGET STATUS & DEMO INFO -->
+        <div class="grid grid-cols-2 gap-2">
+            <div onclick="openModal('simulation-modal')" class="glass-panel p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:border-kauman-gold">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-kauman-gold/20 flex items-center justify-center text-kauman-gold">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-300">Status Warga</p>
+                        <p class="text-xs font-bold text-kauman-cream" id="widget-status-summary">Energi 100%</p>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-xs text-kauman-gold"></i>
+            </div>
 
-<!-- PETA -->
-<section id="map" class="page">
- <div class="panel">
-  <h2>🗺️ Peta Kauman City</h2>
-  <p class="muted">Peta konsep wilayah kota virtual.</p>
-  <div class="map">
-   <div class="place">🕌<b><br>Masjid Kauman</b><p class="muted">Pusat ibadah</p></div>
-   <div class="place">🧺<b><br>Pasar Kauman</b><p class="muted">Perdagangan</p></div>
-   <div class="place">🏡<b><br>Kampung Kauman</b><p class="muted">Perumahan</p></div>
-   <div class="place">🏛️<b><br>Balai Kota</b><p class="muted">Pemerintahan</p></div>
-   <div class="place">🌳<b><br>Taman Warga</b><p class="muted">Ruang publik</p></div>
-   <div class="place">🏦<b><br>Kauman Bank</b><p class="muted">Keuangan virtual</p></div>
-  </div>
-  <div class="notice">Ini peta konsep, bukan peta geografis asli. Peta interaktif dan posisi bangunan sungguhan akan ditambahkan pada versi berikutnya.</div>
- </div>
-</section>
+            <div class="glass-panel p-3 rounded-2xl flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">
+                        <i class="fa-solid fa-sun text-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-300">Cuaca Kota</p>
+                        <p class="text-xs font-bold text-kauman-cream">Cerah 30°C</p>
+                    </div>
+                </div>
+                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/30">DEMO</span>
+            </div>
+        </div>
 
-<!-- KEHIDUPAN -->
-<section id="life" class="page">
- <div class="panel">
-  <h2>🧑‍🌾 Kehidupan Warga</h2>
-  <p class="muted">Kerjakan aktivitas untuk memperoleh koin virtual. Energi dan gizi perlu dijaga.</p>
-  <div class="stats">
-   <div class="stat">⚡ Energi<b id="energy2">80</b><div class="bar"><i id="energyBar"></i></div></div>
-   <div class="stat">🍚 Gizi<b id="nutrition2">75</b><div class="bar"><i id="nutritionBar"></i></div></div>
-   <div class="stat">💰 Saldo<b id="money2">500</b></div>
-  </div>
- </div>
- <div class="grid">
-  <div class="tile"><div class="emoji">🐔</div><h3>Pedagang Ayam</h3><p class="muted">Bekerja di pasar ayam virtual.</p><p>+75 koin</p><button class="btn" onclick="work(20,15,75)">Bekerja</button></div>
-  <div class="tile"><div class="emoji">🍜</div><h3>Penjual Makanan</h3><p class="muted">Melayani pembeli di warung.</p><p>+60 koin</p><button class="btn" onclick="work(15,12,60)">Bekerja</button></div>
-  <div class="tile"><div class="emoji">🧵</div><h3>Penjahit</h3><p class="muted">Membuat busana warga.</p><p>+65 koin</p><button class="btn" onclick="work(17,10,65)">Bekerja</button></div>
-  <div class="tile"><div class="emoji">🍚</div><h3>Warung Makan</h3><p class="muted">Pulihkan gizi dan energi.</p><p>-20 koin</p><button class="btn gold" onclick="eat()">Makan</button></div>
-  <div class="tile"><div class="emoji">🛏️</div><h3>Rumah</h3><p class="muted">Beristirahat untuk memulihkan energi.</p><button class="btn light" onclick="sleep()">Tidur</button></div>
-  <div class="tile"><div class="emoji">🕌</div><h3>Masjid Kauman</h3><p class="muted">Kunjungi masjid dan lihat informasi kegiatan.</p><button class="btn light" onclick="prayer()">Kunjungi</button></div>
- </div>
- <div class="notice">Ibadah bukan mekanik untuk mendapatkan koin atau bonus permainan. Fitur masjid hanya berupa kunjungan dan informasi kegiatan. Hormati waktu serta kekhusyukan ibadah.</div>
-</section>
+        <!-- PETA ISOMETRIK INTERAKTIF -->
+        <div class="isometric-map rounded-3xl p-4 border border-kauman-gold/40 relative min-h-[440px] flex flex-col justify-between overflow-hidden shadow-2xl">
+            
+            <!-- Floating Menu Samping Kanan -->
+            <div class="absolute right-3 top-3 z-20 flex flex-col space-y-2">
+                <button onclick="openMayorPanel()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-kauman-gold shadow-lg floating-btn" title="Panel Wali Kota">
+                    <i class="fa-solid fa-crown"></i>
+                </button>
+                <button onclick="openModal('bank-modal')" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-amber-300 shadow-lg floating-btn" title="Kauman Bank">
+                    <i class="fa-solid fa-building-columns"></i>
+                </button>
+                <button onclick="openModal('shop-modal')" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-emerald-300 shadow-lg floating-btn" title="Toko & Pasar">
+                    <i class="fa-solid fa-store"></i>
+                </button>
+                <button onclick="openModal('social-modal')" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-sky-300 shadow-lg floating-btn" title="Feed Sosial">
+                    <i class="fa-solid fa-comments"></i>
+                </button>
+            </div>
 
-<!-- RUMAH -->
-<section id="house" class="page">
- <div class="panel">
-  <h2>🏡 Perumahan Kauman</h2>
-  <p>Pilih konsep rumah untuk karakter virtualmu.</p>
-  <div class="grid">
-   <div class="tile"><div class="emoji">🏠</div><h3>Rumah Kampung</h3><p class="muted">Gaya kampung Semarang.</p><b>200 koin</b><button class="btn" onclick="buy(200,'Rumah Kampung')">Pilih</button></div>
-   <div class="tile"><div class="emoji">🏡</div><h3>Rumah Heritage</h3><p class="muted">Nuansa bangunan klasik.</p><b>400 koin</b><button class="btn" onclick="buy(400,'Rumah Heritage')">Pilih</button></div>
-   <div class="tile"><div class="emoji">🏘️</div><h3>Rumah Modern</h3><p class="muted">Desain minimalis modern.</p><b>600 koin</b><button class="btn" onclick="buy(600,'Rumah Modern')">Pilih</button></div>
-  </div>
-  <p id="myHouse" class="notice">Rumahmu: Belum memiliki rumah.</p>
- </div>
-</section>
+            <!-- Header Badge Kota -->
+            <div class="self-center bg-kauman-900/90 border border-kauman-gold px-4 py-1.5 rounded-full text-center shadow-lg z-10">
+                <p class="text-[10px] text-kauman-gold uppercase tracking-wider font-bold">Semarang Heritage District</p>
+                <p class="text-xs font-extrabold text-kauman-cream">KAUMAN CITY VIRTUAL WORLD</p>
+            </div>
 
-<!-- PASAR -->
-<section id="market" class="page">
- <div class="panel">
-  <h2>🛍️ Pasar Kauman</h2>
-  <p class="muted">Toko perlengkapan karakter virtual.</p>
-  <div class="grid">
-   <div class="tile"><div class="emoji">👕</div><h3>Baju Koko</h3><b>50 koin</b><button class="btn" onclick="buy(50,'Baju Koko')">Beli</button></div>
-   <div class="tile"><div class="emoji">🧕</div><h3>Hijab</h3><b>40 koin</b><button class="btn" onclick="buy(40,'Hijab')">Beli</button></div>
-   <div class="tile"><div class="emoji">🥻</div><h3>Gamis</h3><b>70 koin</b><button class="btn" onclick="buy(70,'Gamis')">Beli</button></div>
-   <div class="tile"><div class="emoji">🧵</div><h3>Batik Semarangan</h3><b>65 koin</b><button class="btn" onclick="buy(65,'Batik Semarangan')">Beli</button></div>
-   <div class="tile"><div class="emoji">🧣</div><h3>Sarung</h3><b>35 koin</b><button class="btn" onclick="buy(35,'Sarung')">Beli</button></div>
-   <div class="tile"><div class="emoji">🧥</div><h3>Lurik</h3><b>55 koin</b><button class="btn" onclick="buy(55,'Lurik')">Beli</button></div>
-  </div>
- </div>
-</section>
+            <!-- LOKASI / BANGUNAN KOTA -->
+            <div class="grid grid-cols-2 gap-3 my-auto z-10 py-2" id="buildings-grid">
+                <!-- Dimuat Dinamis via app.js -->
+            </div>
 
-<!-- BANK -->
-<section id="bank" class="page">
- <div class="panel">
-  <h2>🏦 KAUMAN BANK</h2>
-  <p class="muted">Modern virtual banking experience.</p>
-  <div class="tile">
-   <p>Saldo virtual kamu</p>
-   <h1 style="color:var(--green)" id="bankMoney">500</h1>
-   <b>Rp.KaumanCity</b>
-  </div>
-  <h3>📜 Riwayat transaksi</h3>
-  <div id="transactions" class="muted">Belum ada transaksi.</div>
- </div>
- <div class="panel">
-  <h2>🌱 Donasi & Saham Halal</h2>
-  <p>Konsep masa depan untuk mendukung kegiatan sosial dan usaha warga.</p>
-  <div class="notice">Belum tersedia transaksi uang sungguhan, pengumpulan donasi, atau investasi. Saham dan produk investasi nyata harus melalui lembaga resmi, pemeriksaan kepatuhan syariah, dan aturan yang berlaku.</div>
- </div>
-</section>
+            <!-- Loket Simulasi Penerbangan / Info Kota (DEMO) -->
+            <div class="glass-panel p-2.5 rounded-2xl flex items-center justify-between text-xs z-10 border border-kauman-gold/30">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-plane-departure text-kauman-gold"></i>
+                    <span class="text-gray-300">Pemberangkatan Bandara:</span>
+                    <span class="font-bold text-kauman-cream">Tiba 18.55 WIB</span>
+                </div>
+                <span class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/30">DEMO</span>
+            </div>
 
-<!-- PROFIL -->
-<section id="profile" class="page">
- <div class="panel">
-  <h2>👤 Profil Warga</h2>
-  <div class="emoji">🧑🏻</div>
-  <label>Nama karakter</label>
-  <input id="characterName" placeholder="Nama warga">
-  <label>Username Instagram (opsional)</label>
-  <input id="instagram" placeholder="@username">
-  <label>Pekerjaan</label>
-  <select id="job"><option>Belum bekerja</option><option>Pedagang ayam</option><option>Penjual makanan</option><option>Penjahit</option></select>
-  <button class="btn" onclick="saveProfile()">Simpan profil demo</button>
-  <p id="profileInfo" class="muted">Profil demo belum diisi.</p>
- </div>
- <div class="notice">Profil ini hanya tersimpan di perangkat/browser ini. Belum menjadi akun warga online.</div>
-</section>
+        </div>
 
-<!-- BALAI KOTA -->
-<section id="cityhall" class="page">
- <div class="panel">
-  <h2>🏛️ Balai Kota Kauman</h2>
-  <div class="emoji">🕌</div>
-  <h3>Pusat pemerintahan dan kegiatan warga</h3>
-  <p>Masjid Kauman menjadi salah satu ikon budaya dan kehidupan masyarakat kota virtual ini. Fungsi pemerintahan dan administrasi kota dikelola melalui sistem Balai Kota virtual.</p>
-  <div class="tile"><b>Wali Kota</b><p>@hikamalgadri</p></div>
-  <div class="tile"><b>Program Kota</b><p>Pelestarian budaya, kebersihan lingkungan, perdagangan warga, dan kegiatan sosial.</p></div>
-  <div class="notice">Dashboard ini masih tampilan demo. Hak Wali Kota dan Admin harus diamankan melalui server sebelum digunakan banyak orang.</div>
- </div>
-</section>
+    </main>
 
-<footer>
- <b>KAUMAN CITY</b><br>
- Virtual City of Semarang · V1.0<br>
- Dibangun untuk simulasi kehidupan dan budaya warga.
-</footer>
-</main>
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 glass-panel border-t border-kauman-gold/30 px-2 py-2 z-45 flex justify-around items-center">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center text-kauman-gold space-y-0.5">
+            <i class="fa-solid fa-map text-base"></i>
+            <span class="text-[10px] font-semibold">Peta Kota</span>
+        </button>
+        <button onclick="openModal('simulation-modal')" class="flex flex-col items-center text-gray-400 hover:text-kauman-gold space-y-0.5">
+            <i class="fa-solid fa-heart-pulse text-base"></i>
+            <span class="text-[10px] font-semibold">Simulasi</span>
+        </button>
+        <button onclick="openModal('bank-modal')" class="flex flex-col items-center text-gray-400 hover:text-kauman-gold space-y-0.5">
+            <i class="fa-solid fa-wallet text-base"></i>
+            <span class="text-[10px] font-semibold">Bank</span>
+        </button>
+        <button onclick="openLocation('Alun-Alun Kauman', 'Pusat pekerjaan warga, ambil misi, dan cari penghasilan virtual.')" class="flex flex-col items-center text-gray-400 hover:text-kauman-gold space-y-0.5">
+            <i class="fa-solid fa-toolbox text-base"></i>
+            <span class="text-[10px] font-semibold">Kerja</span>
+        </button>
+        <button onclick="openModal('social-modal')" class="flex flex-col items-center text-gray-400 hover:text-kauman-gold space-y-0.5">
+            <i class="fa-solid fa-comments text-base"></i>
+            <span class="text-[10px] font-semibold">Sosial</span>
+        </button>
+    </nav>
 
-<script>
-let state={
- money:500,energy:80,nutrition:75,
- house:"Belum memiliki rumah",transactions:[]
-};
 
-function go(id,button){
- document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
- if(button)button.classList.add('active');
- window.scrollTo({top:0,behavior:'smooth'});
-}
+    <!-- MODAL 1: AUTH (LOGIN & REGISTER) -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-5 border border-kauman-gold shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-kauman-gold/30 pb-3">
+                <h3 class="font-bold text-kauman-gold" id="auth-modal-title"><i class="fa-solid fa-user-lock mr-1"></i> Masuk Warga Kauman</h3>
+                <button onclick="closeModal('auth-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div id="register-fields" class="space-y-3 hidden">
+                    <div>
+                        <label class="block text-kauman-gold font-semibold mb-1">Nama Karakter / Warga</label>
+                        <input type="text" id="auth-name" placeholder="Hikam" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                    </div>
+                    <div>
+                        <label class="block text-kauman-gold font-semibold mb-1">Username Instagram (@)</label>
+                        <input type="text" id="auth-ig" placeholder="@hikamalgadri" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-kauman-gold font-semibold mb-1">Email Warga</label>
+                    <input type="email" id="auth-email" placeholder="warga@kaumancity.com" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                </div>
+                <div>
+                    <label class="block text-kauman-gold font-semibold mb-1">Password</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                </div>
+                <button onclick="handleAuthSubmit()" id="auth-submit-btn" class="w-full bg-kauman-gold text-kauman-900 font-bold py-2.5 rounded-xl text-xs">Masuk ke Kota</button>
+                <div class="text-center pt-2">
+                    <button onclick="toggleAuthMode()" id="auth-toggle-btn" class="text-kauman-gold underline text-[11px]">Belum punya akun warga? Daftar di sini</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-function save(){
- localStorage.setItem('kaumanCityDemo',JSON.stringify(state));
-}
-function load(){
- try{
-  let saved=JSON.parse(localStorage.getItem('kaumanCityDemo'));
-  if(saved)state={...state,...saved};
- }catch(e){}
-}
-function render(){
- ['money','money2','bankMoney'].forEach(id=>{
-  let el=document.getElementById(id);
-  if(el)el.textContent=state.money;
- });
- ['energy','energy2'].forEach(id=>{
-  let el=document.getElementById(id);
-  if(el)el.textContent=state.energy;
- });
- ['nutrition','nutrition2'].forEach(id=>{
-  let el=document.getElementById(id);
-  if(el)el.textContent=state.nutrition;
- });
- document.getElementById('energyBar').style.width=state.energy+'%';
- document.getElementById('nutritionBar').style.width=state.nutrition+'%';
- document.getElementById('myHouse').textContent='Rumahmu: '+state.house;
- document.getElementById('transactions').innerHTML=
-  state.transactions.length?state.transactions.slice(-8).reverse().map(t=>'<div class="feed">'+t+'</div>').join(''):'Belum ada transaksi.';
-}
-function log(text){
- state.transactions.push(text);
- save();render();
-}
-function work(energy,nutrition,reward){
- if(state.energy<energy||state.nutrition<nutrition){
-  alert('Energi atau gizi kurang. Makan dan istirahat dulu!');
-  return;
- }
- state.energy-=energy;
- state.nutrition-=nutrition;
- state.money+=reward;
- log('Pekerjaan selesai: +'+reward+' koin virtual');
- alert('Kerja selesai! Kamu mendapat '+reward+' koin virtual.');
-}
-function eat(){
- if(state.money<20){alert('Saldo koin virtual tidak cukup.');return;}
- state.money-=20;
- state.nutrition=Math.min(100,state.nutrition+30);
- state.energy=Math.min(100,state.energy+8);
- log('Makan di warung: -20 koin');
- render();
-}
-function sleep(){
- state.energy=Math.min(100,state.energy+35);
- log('Istirahat di rumah.');
- alert('Istirahat selesai. Energi bertambah!');
-}
-function prayer(){
- alert('Selamat datang di Masjid Kauman virtual. Tempat ini untuk mengenal masjid dan kegiatan warga. Ibadah tetap dilakukan dengan niat dan kekhusyukan, bukan untuk hadiah permainan.');
-}
-function buy(price,item){
- if(state.money<price){alert('Saldo koin virtual tidak cukup!');return;}
- if(!confirm('Beli '+item+' seharga '+price+' koin virtual?'))return;
- state.money-=price;
- if(item.startsWith('Rumah'))state.house=item;
- log('Pembelian '+item+': -'+price+' koin');
- alert(item+' berhasil dibeli dalam simulasi!');
-}
-function post(){
- let input=document.getElementById('postText');
- let value=input.value.trim();
- if(!value)return alert('Tulis postingan dulu!');
- let item=document.createElement('div');
- item.className='feed';
- let title=document.createElement('b');
- title.textContent='👤 Warga Kauman';
- let content=document.createElement('p');
- content.className='muted';
- content.textContent=value;
- item.append(title,content);
- document.getElementById('feed').prepend(item);
- input.value='';
-}
-function saveProfile(){
- let name=document.getElementById('characterName').value.trim();
- let insta=document.getElementById('instagram').value.trim();
- let job=document.getElementById('job').value;
- if(!name)return alert('Masukkan nama karakter!');
- document.getElementById('profileInfo').textContent=
- 'Nama: '+name+' | Instagram: '+(insta||'-')+' | Pekerjaan: '+job;
-}
-load();
-render();
-</script>
+
+    <!-- MODAL 2: SIMULASI KEHIDUPAN -->
+    <div id="simulation-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-5 border border-kauman-gold shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-kauman-gold/30 pb-3">
+                <h3 class="font-bold text-kauman-gold flex items-center gap-2"><i class="fa-solid fa-heart-pulse"></i> Simulasi Kehidupan Warga</h3>
+                <button onclick="closeModal('simulation-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span>Energi Fisik</span>
+                        <span id="stat-energi">100%</span>
+                    </div>
+                    <div class="w-full bg-kauman-900 h-2.5 rounded-full overflow-hidden">
+                        <div id="bar-energi" class="bg-emerald-500 h-full w-[100%] transition-all"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span>Gizi & Nutrisi</span>
+                        <span id="stat-gizi">100%</span>
+                    </div>
+                    <div class="w-full bg-kauman-900 h-2.5 rounded-full overflow-hidden">
+                        <div id="bar-gizi" class="bg-amber-500 h-full w-[100%] transition-all"></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 pt-2">
+                    <button onclick="doSimulation('makan')" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs"><i class="fa-solid fa-utensils mr-1"></i> Makan</button>
+                    <button onclick="doSimulation('tidur')" class="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 rounded-xl text-xs"><i class="fa-solid fa-bed mr-1"></i> Tidur</button>
+                    <button onclick="doSimulation('ibadah')" class="bg-amber-600 hover:bg-amber-500 text-kauman-900 font-bold py-2 rounded-xl text-xs col-span-2"><i class="fa-solid fa-mosque mr-1"></i> Ibadah (Bonus EXP)</button>
+                    <button onclick="doSimulation('kerja')" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 rounded-xl text-xs col-span-2"><i class="fa-solid fa-briefcase mr-1"></i> Bekerja (+ Rp.KAUMANCITY)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL 3: BANK KAUMAN SYARIAH -->
+    <div id="bank-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-5 border border-kauman-gold shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-kauman-gold/30 pb-3">
+                <h3 class="font-bold text-kauman-gold flex items-center gap-2"><i class="fa-solid fa-building-columns"></i> Kauman Bank Syariah</h3>
+                <button onclick="closeModal('bank-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div class="bg-kauman-900/80 p-3 rounded-2xl border border-kauman-gold/40 text-center">
+                    <p class="text-[10px] text-gray-400 uppercase">Saldo Rekening Virtual</p>
+                    <p id="bank-saldo-display" class="text-xl font-extrabold text-kauman-gold mt-1">Rp. 0</p>
+                </div>
+                <div class="space-y-2">
+                    <label class="block font-semibold text-kauman-cream">Transfer Saldo Antar Warga</label>
+                    <input type="text" id="transfer-target" placeholder="Username Warga Tujuan" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                    <input type="number" id="transfer-amount" placeholder="Nominal (Rp. KAUMANCITY)" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                    <button onclick="executeTransfer()" class="w-full bg-kauman-gold text-kauman-900 font-bold py-2 rounded-xl text-xs">Kirim Saldo Aman (Atomic RPC)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL 4: PANEL WALI KOTA (ADMIN DASHBOARD) -->
+    <div id="mayor-panel-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-5 border border-kauman-gold shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-kauman-gold/30 pb-3">
+                <h3 class="font-bold text-kauman-gold flex items-center gap-2"><i class="fa-solid fa-crown"></i> Panel Wali Kota & Manajemen</h3>
+                <button onclick="closeModal('mayor-panel-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <div class="bg-green-900/40 p-3 rounded-xl border border-green-500/40 flex items-center justify-between">
+                    <div>
+                        <p class="font-bold text-green-300" id="mayor-status-title">Akses Terverifikasi</p>
+                        <p class="text-[10px] text-gray-300">Pusat kontrol database RLS & moderasi warga</p>
+                    </div>
+                    <span class="bg-kauman-gold text-kauman-900 text-[10px] px-2 py-1 rounded font-bold">Admin</span>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-kauman-gold uppercase"><i class="fa-solid fa-user-check mr-1"></i> Persetujuan Warga Baru (Pending)</h4>
+                    <div id="pending-users-list" class="bg-kauman-900/60 p-3 rounded-xl border border-kauman-gold/30 space-y-2">
+                        <p class="text-gray-400 text-center py-2">Memuat daftar warga...</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-kauman-gold uppercase"><i class="fa-solid fa-hammer mr-1"></i> Tambah Bangunan Kota</h4>
+                    <div class="space-y-2">
+                        <input type="text" id="new-building-name" placeholder="Nama Bangunan / Kios" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                        <select id="new-building-category" class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl px-3 py-2 text-xs text-kauman-cream">
+                            <option value="Pusat">Pusat / Peribadatan</option>
+                            <option value="Ekonomi">Ekonomi / Pasar</option>
+                            <option value="Hunian">Hunian / Pemukiman</option>
+                            <option value="Fashion">Fashion / Toko</option>
+                        </select>
+                        <button onclick="addNewBuilding()" class="w-full bg-emerald-600 text-white font-bold py-2 rounded-xl">Bangun & Simpan ke Database</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL 5: LOKASI DETAIL -->
+    <div id="location-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-5 border border-kauman-gold shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-kauman-gold/30 pb-3">
+                <h3 class="font-bold text-kauman-gold" id="loc-title">Lokasi Kota</h3>
+                <button onclick="closeModal('location-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-gray-200" id="loc-desc">Deskripsi lokasi kota virtual.</p>
+            <button onclick="closeModal('location-modal')" class="w-full bg-kauman-gold text-kauman-900 font-bold py-2 rounded-xl text-xs">Tutup</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL 6: FEED SOSIAL (AMAN DARI XSS) -->
+    <div id="social-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-5 border border-kauman-gold shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-kauman-gold/30 pb-3">
+                <h3 class="font-bold text-kauman-gold"><i class="fa-solid fa-comments mr-1"></i> Feed Sosial Warga</h3>
+                <button onclick="closeModal('social-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <textarea id="social-post-text" placeholder="Bagikan aktivitas atau pengumuman warga..." class="w-full bg-kauman-900/80 border border-kauman-gold/30 rounded-xl p-2.5 text-xs text-kauman-cream focus:outline-none"></textarea>
+                <button onclick="submitSocialPost()" class="w-full bg-kauman-gold text-kauman-900 font-bold py-2 rounded-xl">Kirim Postingan</button>
+                <div id="feed-container" class="space-y-2 pt-2 max-h-48 overflow-y-auto">
+                    <!-- Dimuat aman via textContent / DOM API -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOAD EXTERNAL LOGIC JS -->
+    <script src="app.js"></script>
 </body>
 </html>
